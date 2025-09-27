@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ExerciseData, DayRecord, UserSettings } from '../App'
 import { HydrationVisualizer } from './HydrationVisualizer'
-import { Plus, Minus } from '@phosphor-icons/react'
+import { SmartCounter } from './SmartCounter'
+import { Plus, Minus, DeviceMobile, Calculator } from '@phosphor-icons/react'
 
 interface TodayViewProps {
   settings: UserSettings
@@ -24,6 +26,7 @@ export function TodayView({ settings, records, setRecords, currentStreak, setCur
   })
   
   const [showCelebration, setShowCelebration] = useState(false)
+  const [counterMode, setCounterMode] = useState<'manual' | 'smart'>('manual')
 
   const today = new Date().toISOString().split('T')[0]
   const todayRecord = records.find(r => r.date === today)
@@ -67,6 +70,23 @@ export function TodayView({ settings, records, setRecords, currentStreak, setCur
     newData[exercise] = Math.max(0, Math.min(currentValue + delta, maxAllowed))
     setTodayData(newData)
     
+    // Update records
+    updateRecordsForExercise(newData)
+  }
+
+  const setExerciseValue = (exercise: keyof ExerciseData, value: number) => {
+    const newData = { ...todayData }
+    const target = targets[exercise]
+    const maxAllowed = target * 1.5 // Prevent excessive values
+    
+    newData[exercise] = Math.max(0, Math.min(value, maxAllowed))
+    setTodayData(newData)
+    
+    // Update records
+    updateRecordsForExercise(newData)
+  }
+
+  const updateRecordsForExercise = (newData: ExerciseData) => {
     // Update records
     setRecords((prev) => {
       const existing = prev.find(r => r.date === today)
@@ -127,44 +147,86 @@ export function TodayView({ settings, records, setRecords, currentStreak, setCur
         <p className="text-muted-foreground">Level {settings.level}% • {new Date().toLocaleDateString()}</p>
       </div>
 
+      {/* Counter Mode Toggle */}
+      <Card>
+        <CardContent className="p-4">
+          <Tabs value={counterMode} onValueChange={(value) => setCounterMode(value as 'manual' | 'smart')}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="manual" className="flex items-center gap-2">
+                <Calculator className="w-4 h-4" />
+                Manual Counter
+              </TabsTrigger>
+              <TabsTrigger value="smart" className="flex items-center gap-2">
+                <DeviceMobile className="w-4 h-4" />
+                Smart Counter
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </CardContent>
+      </Card>
+
       <div className="grid gap-4">
         {/* Push-ups */}
-        <ExerciseCard
-          name="Push-ups"
-          icon="💪"
-          current={todayData.pushups}
-          target={targets.pushups}
-          unit="reps"
-          onAdjust={(delta) => updateExercise('pushups', delta)}
-          progress={getProgress(todayData.pushups, targets.pushups)}
-          complete={isExerciseComplete(todayData.pushups, targets.pushups)}
-        />
+        {counterMode === 'smart' ? (
+          <SmartCounter
+            exerciseType="pushup"
+            onCountUpdate={(count) => setExerciseValue('pushups', count)}
+            targetReps={targets.pushups}
+          />
+        ) : (
+          <ExerciseCard
+            name="Push-ups"
+            icon="💪"
+            current={todayData.pushups}
+            target={targets.pushups}
+            unit="reps"
+            onAdjust={(delta) => updateExercise('pushups', delta)}
+            progress={getProgress(todayData.pushups, targets.pushups)}
+            complete={isExerciseComplete(todayData.pushups, targets.pushups)}
+          />
+        )}
 
         {/* Sit-ups */}
-        <ExerciseCard
-          name="Sit-ups"
-          icon="🔥"
-          current={todayData.situps}
-          target={targets.situps}
-          unit="reps"
-          onAdjust={(delta) => updateExercise('situps', delta)}
-          progress={getProgress(todayData.situps, targets.situps)}
-          complete={isExerciseComplete(todayData.situps, targets.situps)}
-        />
+        {counterMode === 'smart' ? (
+          <SmartCounter
+            exerciseType="situp"
+            onCountUpdate={(count) => setExerciseValue('situps', count)}
+            targetReps={targets.situps}
+          />
+        ) : (
+          <ExerciseCard
+            name="Sit-ups"
+            icon="🔥"
+            current={todayData.situps}
+            target={targets.situps}
+            unit="reps"
+            onAdjust={(delta) => updateExercise('situps', delta)}
+            progress={getProgress(todayData.situps, targets.situps)}
+            complete={isExerciseComplete(todayData.situps, targets.situps)}
+          />
+        )}
 
         {/* Squats */}
-        <ExerciseCard
-          name="Squats"
-          icon="🦵"
-          current={todayData.squats}
-          target={targets.squats}
-          unit="reps"
-          onAdjust={(delta) => updateExercise('squats', delta)}
-          progress={getProgress(todayData.squats, targets.squats)}
-          complete={isExerciseComplete(todayData.squats, targets.squats)}
-        />
+        {counterMode === 'smart' ? (
+          <SmartCounter
+            exerciseType="squat"
+            onCountUpdate={(count) => setExerciseValue('squats', count)}
+            targetReps={targets.squats}
+          />
+        ) : (
+          <ExerciseCard
+            name="Squats"
+            icon="🦵"
+            current={todayData.squats}
+            target={targets.squats}
+            unit="reps"
+            onAdjust={(delta) => updateExercise('squats', delta)}
+            progress={getProgress(todayData.squats, targets.squats)}
+            complete={isExerciseComplete(todayData.squats, targets.squats)}
+          />
+        )}
 
-        {/* Running */}
+        {/* Running - Always manual */}
         <ExerciseCard
           name="Running"
           icon="🏃‍♂️"
@@ -180,7 +242,7 @@ export function TodayView({ settings, records, setRecords, currentStreak, setCur
           increment={settings.units === 'imperial' ? 0.5 : 1.0}
         />
 
-        {/* Hydration */}
+        {/* Hydration - Always manual */}
         <HydrationVisualizer
           current={todayData.hydration}
           target={targets.hydration}
