@@ -27,7 +27,7 @@ export function HydrationVisualizer({ current, target, onAdjust, complete }: Hyd
           </div>
         </div>
 
-        {/* Human/Android Body Hydration Visualization */}
+        {/* Human Body Hydration Visualization */}
         <div className="flex items-center justify-center mb-4">
           <div className="relative">
             <svg 
@@ -57,91 +57,102 @@ export function HydrationVisualizer({ current, target, onAdjust, complete }: Hyd
                   />
                 </clipPath>
 
-                {/* Body mask for proper filling */}
+                {/* Body mask for proper filling - more human proportions */}
                 <mask id="bodyMask">
                   <rect width="140" height="220" fill="black"/>
-                  {/* Head */}
-                  <circle cx="70" cy="18" r="15" fill="white"/>
+                  {/* Head - more oval/human shape */}
+                  <ellipse cx="70" cy="20" rx="14" ry="16" fill="white"/>
                   {/* Neck */}
-                  <rect x="62" y="30" width="16" height="12" rx="8" fill="white"/>
-                  {/* Main body */}
+                  <ellipse cx="70" cy="36" rx="8" ry="10" fill="white"/>
+                  {/* Shoulders and torso - natural human curves */}
                   <path
-                    d="M70 40
-                       C80 40 90 45 90 55
-                       L90 70
-                       C95 75 100 80 100 90
-                       L100 130
-                       C100 140 95 145 90 145
-                       L90 160
-                       C90 170 85 175 80 175
-                       L80 195
-                       C80 200 75 205 70 205
-                       L70 205
-                       C65 205 60 200 60 195
-                       L60 175
-                       C55 175 50 170 50 160
-                       L50 145
-                       C45 145 40 140 40 130
-                       L40 90
-                       C40 80 45 75 50 70
-                       L50 55
-                       C50 45 60 40 70 40 Z"
+                    d="M70 45
+                       C55 45 40 50 40 60
+                       C40 65 42 70 45 75
+                       L45 85
+                       C40 90 38 95 38 100
+                       L38 130
+                       C38 140 42 145 48 150
+                       L48 160
+                       C48 170 52 175 58 180
+                       L58 195
+                       C58 200 62 205 70 205
+                       C78 205 82 200 82 195
+                       L82 180
+                       C88 175 92 170 92 160
+                       L92 150
+                       C98 145 102 140 102 130
+                       L102 100
+                       C102 95 100 90 95 85
+                       L95 75
+                       C98 70 100 65 100 60
+                       C100 50 85 45 70 45 Z"
                     fill="white"
                   />
-                  {/* Arms */}
-                  <ellipse cx="25" cy="75" rx="8" ry="25" fill="white"/>
-                  <ellipse cx="115" cy="75" rx="8" ry="25" fill="white"/>
-                  {/* Legs */}
-                  <ellipse cx="55" cy="185" rx="8" ry="20" fill="white"/>
-                  <ellipse cx="85" cy="185" rx="8" ry="20" fill="white"/>
+                  {/* Arms - more natural positioning */}
+                  <ellipse cx="28" cy="80" rx="10" ry="30" fill="white"/>
+                  <ellipse cx="112" cy="80" rx="10" ry="30" fill="white"/>
+                  {/* Legs - better proportions */}
+                  <ellipse cx="58" cy="185" rx="12" ry="22" fill="white"/>
+                  <ellipse cx="82" cy="185" rx="12" ry="22" fill="white"/>
                 </mask>
               </defs>
               
-              {/* Android/Human body outline */}
-              <g stroke="currentColor" strokeWidth="2.5" fill="none" className="opacity-50">
-                {/* Head with slight android/tech feel */}
-                <circle cx="70" cy="18" r="15"/>
-                <circle cx="65" cy="15" r="1.5" fill="currentColor" className="opacity-60"/> {/* Eye */}
-                <circle cx="75" cy="15" r="1.5" fill="currentColor" className="opacity-60"/> {/* Eye */}
-                <path d="M65 22 Q70 25 75 22" strokeWidth="1.5" className="opacity-60"/> {/* Mouth */}
+              {/* Human body outline with natural proportions */}
+              <g stroke="currentColor" strokeWidth="2" fill="none" className="opacity-60">
+                {/* Head - more human-like */}
+                <ellipse cx="70" cy="20" rx="14" ry="16"/>
+                
+                {/* Facial features */}
+                <circle cx="65" cy="16" r="1.5" fill="currentColor" className="opacity-70"/> {/* Left eye */}
+                <circle cx="75" cy="16" r="1.5" fill="currentColor" className="opacity-70"/> {/* Right eye */}
+                <ellipse cx="70" cy="20" rx="1" ry="2" fill="currentColor" className="opacity-50"/> {/* Nose */}
+                <path d="M66 25 Q70 27 74 25" strokeWidth="1.5" className="opacity-60"/> {/* Mouth */}
+                
+                {/* Hair outline */}
+                <path d="M56 12 Q60 8 70 8 Q80 8 84 12" strokeWidth="1.5" className="opacity-40" fill="none"/>
                 
                 {/* Neck */}
-                <rect x="62" y="30" width="16" height="12" rx="8"/>
+                <ellipse cx="70" cy="36" rx="8" ry="10"/>
                 
-                {/* Main torso - slightly robotic proportions */}
-                <path d="M70 40
-                         C80 40 90 45 90 55
-                         L90 70
-                         C95 75 100 80 100 90
-                         L100 130
-                         C100 140 95 145 90 145
-                         L90 160
-                         C90 170 85 175 80 175
-                         L80 195
-                         C80 200 75 205 70 205
-                         L70 205
-                         C65 205 60 200 60 195
-                         L60 175
-                         C55 175 50 170 50 160
-                         L50 145
-                         C45 145 40 140 40 130
-                         L40 90
-                         C40 80 45 75 50 70
-                         L50 55
-                         C50 45 60 40 70 40 Z"/>
+                {/* Main torso - natural human silhouette */}
+                <path d="M70 45
+                         C55 45 40 50 40 60
+                         C40 65 42 70 45 75
+                         L45 85
+                         C40 90 38 95 38 100
+                         L38 130
+                         C38 140 42 145 48 150
+                         L48 160
+                         C48 170 52 175 58 180
+                         L58 195
+                         C58 200 62 205 70 205
+                         C78 205 82 200 82 195
+                         L82 180
+                         C88 175 92 170 92 160
+                         L92 150
+                         C98 145 102 140 102 130
+                         L102 100
+                         C102 95 100 90 95 85
+                         L95 75
+                         C98 70 100 65 100 60
+                         C100 50 85 45 70 45 Z"/>
                 
-                {/* Arms */}
-                <ellipse cx="25" cy="75" rx="8" ry="25"/>
-                <ellipse cx="115" cy="75" rx="8" ry="25"/>
+                {/* Arms with hands */}
+                <ellipse cx="28" cy="80" rx="10" ry="30"/>
+                <ellipse cx="112" cy="80" rx="10" ry="30"/>
+                <circle cx="28" cy="105" r="5" className="opacity-50"/> {/* Left hand */}
+                <circle cx="112" cy="105" r="5" className="opacity-50"/> {/* Right hand */}
                 
-                {/* Legs */}
-                <ellipse cx="55" cy="185" rx="8" ry="20"/>
-                <ellipse cx="85" cy="185" rx="8" ry="20"/>
+                {/* Legs with feet */}
+                <ellipse cx="58" cy="185" rx="12" ry="22"/>
+                <ellipse cx="82" cy="185" rx="12" ry="22"/>
+                <ellipse cx="58" cy="205" rx="8" ry="4" className="opacity-50"/> {/* Left foot */}
+                <ellipse cx="82" cy="205" rx="8" ry="4" className="opacity-50"/> {/* Right foot */}
                 
-                {/* Tech details */}
-                <circle cx="70" cy="60" r="3" className="opacity-30"/> {/* Chest indicator */}
-                <rect x="65" y="80" width="10" height="3" rx="1" className="opacity-20"/> {/* Body panel */}
-                <rect x="65" y="90" width="10" height="3" rx="1" className="opacity-20"/> {/* Body panel */}
+                {/* Subtle body details */}
+                <line x1="70" y1="55" x2="70" y2="62" strokeWidth="1" className="opacity-30"/> {/* Chest line */}
+                <circle cx="70" cy="70" r="2" className="opacity-20"/> {/* Navel */}
               </g>
               
               {/* Hydration fill with wave effect */}
@@ -158,36 +169,51 @@ export function HydrationVisualizer({ current, target, onAdjust, complete }: Hyd
                 />
               )}
               
-              {/* Animated water particles inside body */}
+              {/* Animated water particles inside body - more realistic circulation */}
               {current > 0 && (
                 <g mask="url(#bodyMask)">
-                  {Array.from({ length: Math.min(current, 8) }, (_, i) => (
-                    <g key={i}>
+                  {/* Heart area circulation */}
+                  {Array.from({ length: Math.min(current, 6) }, (_, i) => (
+                    <g key={`heart-${i}`}>
                       <circle
-                        cx={50 + (i % 3) * 20}
-                        cy={60 + (i * 15)}
-                        r="2"
+                        cx={65 + (i % 2) * 10}
+                        cy={65 + (i * 8)}
+                        r="1.5"
                         fill="#0ea5e9"
                         className="droplet-fall"
                         style={{ 
-                          animationDelay: `${i * 0.4}s`,
-                          opacity: Math.max(0.4, 1 - (i * 0.12))
-                        }}
-                      />
-                      {/* Small bubble effect */}
-                      <circle
-                        cx={55 + (i % 2) * 15}
-                        cy={80 + (i * 12)}
-                        r="1"
-                        fill="#60a5fa"
-                        className="droplet-fall"
-                        style={{ 
-                          animationDelay: `${i * 0.5 + 0.2}s`,
-                          opacity: 0.6
+                          animationDelay: `${i * 0.3}s`,
+                          opacity: Math.max(0.5, 1 - (i * 0.1))
                         }}
                       />
                     </g>
                   ))}
+                  
+                  {/* Torso hydration particles */}
+                  {Array.from({ length: Math.min(current, 4) }, (_, i) => (
+                    <circle
+                      key={`torso-${i}`}
+                      cx={60 + (i % 3) * 10}
+                      cy={90 + (i * 20)}
+                      r="2"
+                      fill="#3b82f6"
+                      className="droplet-fall"
+                      style={{ 
+                        animationDelay: `${i * 0.6 + 0.2}s`,
+                        opacity: 0.7
+                      }}
+                    />
+                  ))}
+                  
+                  {/* Limb circulation indicators */}
+                  {current >= 4 && (
+                    <>
+                      <circle cx="28" cy="85" r="1" fill="#60a5fa" className="droplet-fall" style={{ animationDelay: '1s' }} />
+                      <circle cx="112" cy="85" r="1" fill="#60a5fa" className="droplet-fall" style={{ animationDelay: '1.2s' }} />
+                      <circle cx="58" cy="170" r="1" fill="#60a5fa" className="droplet-fall" style={{ animationDelay: '1.4s' }} />
+                      <circle cx="82" cy="170" r="1" fill="#60a5fa" className="droplet-fall" style={{ animationDelay: '1.6s' }} />
+                    </>
+                  )}
                 </g>
               )}
 

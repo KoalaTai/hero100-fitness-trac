@@ -139,13 +139,14 @@
   animation: droplet-fall 3s ease-in-out infinite;
 }
 
-/* Enhanced android/human body styling */
+/* Enhanced human body styling */
 .hydration-body {
   filter: drop-shadow(0 2px 8px rgba(59, 130, 246, 0.1));
 }
 
 .hydration-body.hydrated {
   animation: hydration-pulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.2));
 }
 
 @media (prefers-reduced-motion: reduce) {
