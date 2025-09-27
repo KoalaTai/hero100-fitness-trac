@@ -2,16 +2,45 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Plus, Minus, Drop } from '@phosphor-icons/react'
+import { ExerciseData } from '../App'
 
 interface HydrationVisualizerProps {
   current: number
   target: number
   onAdjust: (delta: number) => void
   complete: boolean
+  exerciseData: ExerciseData
+  exerciseTargets: {
+    pushups: number
+    situps: number
+    squats: number
+    runDistance: number
+  }
 }
 
-export function HydrationVisualizer({ current, target, onAdjust, complete }: HydrationVisualizerProps) {
+export function HydrationVisualizer({ 
+  current, 
+  target, 
+  onAdjust, 
+  complete,
+  exerciseData,
+  exerciseTargets 
+}: HydrationVisualizerProps) {
   const hydrationPercentage = Math.min((current / target) * 100, 100)
+  
+  // Calculate muscle group activation based on exercises
+  const muscleActivation = {
+    chest: exerciseData.pushups >= exerciseTargets.pushups,
+    shoulders: exerciseData.pushups >= exerciseTargets.pushups,
+    triceps: exerciseData.pushups >= exerciseTargets.pushups,
+    core: exerciseData.situps >= exerciseTargets.situps,
+    abs: exerciseData.situps >= exerciseTargets.situps,
+    quads: exerciseData.squats >= exerciseTargets.squats,
+    glutes: exerciseData.squats >= exerciseTargets.squats,
+    calves: exerciseData.runDistance >= exerciseTargets.runDistance,
+    hamstrings: exerciseData.runDistance >= exerciseTargets.runDistance,
+    cardio: exerciseData.runDistance >= exerciseTargets.runDistance
+  }
   
   return (
     <Card className={`transition-colors ${complete ? 'border-accent bg-accent/5' : ''}`}>
@@ -27,329 +56,269 @@ export function HydrationVisualizer({ current, target, onAdjust, complete }: Hyd
           </div>
         </div>
 
-        {/* Human Body Hydration Visualization */}
+        {/* Human Body Muscle Group Visualization */}
         <div className="flex items-center justify-center mb-4">
           <div className="relative">
             <svg 
-              width="140" 
-              height="220" 
-              viewBox="0 0 140 220" 
-              className={`text-muted-foreground hydration-body transition-all duration-500 ${
-                hydrationPercentage >= 100 ? 'hydrated' : ''
-              }`}
+              width="160" 
+              height="240" 
+              viewBox="0 0 160 240" 
+              className="text-muted-foreground muscle-body transition-all duration-500"
             >
               <defs>
-                {/* Hydration gradient with wave effect */}
-                <linearGradient id="hydrationGradient" x1="0%" y1="100%" x2="0%" y2="0%">
-                  <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.9" />
-                  <stop offset="30%" stopColor="#3b82f6" stopOpacity="0.7" />
-                  <stop offset="60%" stopColor="#60a5fa" stopOpacity="0.5" />
-                  <stop offset="100%" stopColor="#93c5fd" stopOpacity="0.3" />
-                </linearGradient>
+                {/* Muscle activation gradients */}
+                <radialGradient id="chestGradient" cx="50%" cy="50%">
+                  <stop offset="0%" stopColor="#ef4444" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#dc2626" stopOpacity="0.3" />
+                </radialGradient>
                 
-                {/* Clip path for hydration level with wave effect */}
-                <clipPath id="hydrationClip">
-                  <rect 
-                    x="0" 
-                    y={220 - (hydrationPercentage / 100) * 195} 
-                    width="140" 
-                    height={(hydrationPercentage / 100) * 195}
-                  />
-                </clipPath>
+                <radialGradient id="shoulderGradient" cx="50%" cy="50%">
+                  <stop offset="0%" stopColor="#f97316" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#ea580c" stopOpacity="0.3" />
+                </radialGradient>
+                
+                <radialGradient id="coreGradient" cx="50%" cy="50%">
+                  <stop offset="0%" stopColor="#22c55e" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#16a34a" stopOpacity="0.3" />
+                </radialGradient>
+                
+                <radialGradient id="legGradient" cx="50%" cy="50%">
+                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#2563eb" stopOpacity="0.3" />
+                </radialGradient>
 
-                {/* Body mask for proper filling - realistic human proportions */}
-                <mask id="bodyMask">
-                  <rect width="140" height="220" fill="black"/>
-                  
-                  {/* Head - realistic human skull shape */}
-                  <path d="M70 5 
-                          C82 5 88 12 88 22
-                          C88 28 86 32 82 35
-                          C80 37 76 38 70 38
-                          C64 38 60 37 58 35
-                          C54 32 52 28 52 22
-                          C52 12 58 5 70 5 Z" 
-                        fill="white"/>
-                  
-                  {/* Neck - natural cylinder */}
-                  <rect x="62" y="38" width="16" height="12" rx="8" fill="white"/>
-                  
-                  {/* Torso - anatomically correct human silhouette */}
-                  <path d="M70 50
-                          C90 50 100 55 100 65
-                          C100 70 98 75 95 80
-                          C92 85 90 90 88 95
-                          L88 105
-                          C88 115 85 125 80 135
-                          C78 140 75 145 70 148
-                          C65 145 62 140 60 135
-                          C55 125 52 115 52 105
-                          L52 95
-                          C50 90 48 85 45 80
-                          C42 75 40 70 40 65
-                          C40 55 50 50 70 50 Z" 
-                        fill="white"/>
-                  
-                  {/* Pelvis and hips - natural human shape */}
-                  <ellipse cx="70" cy="155" rx="25" ry="15" fill="white"/>
-                  
-                  {/* Arms - realistic arm proportions */}
-                  <ellipse cx="25" cy="75" rx="8" ry="25" fill="white" transform="rotate(-10 25 75)"/>
-                  <ellipse cx="115" cy="75" rx="8" ry="25" fill="white" transform="rotate(10 115 75)"/>
-                  <ellipse cx="20" cy="100" rx="6" ry="20" fill="white"/>
-                  <ellipse cx="120" cy="100" rx="6" ry="20" fill="white"/>
-                  
-                  {/* Legs - proper human leg proportions */}
-                  <ellipse cx="58" cy="180" rx="10" ry="30" fill="white"/>
-                  <ellipse cx="82" cy="180" rx="10" ry="30" fill="white"/>
-                  <ellipse cx="56" cy="200" rx="8" ry="18" fill="white"/>
-                  <ellipse cx="84" cy="200" rx="8" ry="18" fill="white"/>
-                </mask>
+                <radialGradient id="cardioGradient" cx="50%" cy="50%">
+                  <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.3" />
+                </radialGradient>
+
+                <radialGradient id="hydrationGradient" cx="50%" cy="50%">
+                  <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.6" />
+                  <stop offset="100%" stopColor="#0891b2" stopOpacity="0.2" />
+                </radialGradient>
               </defs>
               
-              {/* Realistic human body outline */}
-              <g stroke="currentColor" strokeWidth="1.8" fill="none" className="opacity-70">
+              {/* Base human body outline */}
+              <g stroke="currentColor" strokeWidth="2" fill="none" className="opacity-60">
+                {/* Head */}
+                <circle cx="80" cy="20" r="15" />
+                <circle cx="76" cy="17" r="1.5" fill="currentColor" className="opacity-40" />
+                <circle cx="84" cy="17" r="1.5" fill="currentColor" className="opacity-40" />
+                <path d="M76 22 Q80 24 84 22" strokeWidth="1" className="opacity-50" />
                 
-                {/* Head - realistic human skull contour */}
-                <path d="M70 5 
-                        C82 5 88 12 88 22
-                        C88 28 86 32 82 35
-                        C80 37 76 38 70 38
-                        C64 38 60 37 58 35
-                        C54 32 52 28 52 22
-                        C52 12 58 5 70 5 Z"/>
+                {/* Neck */}
+                <rect x="75" y="35" width="10" height="8" rx="5" />
                 
-                {/* Detailed facial features */}
-                <ellipse cx="64" cy="18" rx="2" ry="1.5" fill="currentColor" className="opacity-60"/> {/* Left eye */}
-                <ellipse cx="76" cy="18" rx="2" ry="1.5" fill="currentColor" className="opacity-60"/> {/* Right eye */}
-                <circle cx="64" cy="17.5" r="0.8" fill="white" className="opacity-80"/> {/* Left eye highlight */}
-                <circle cx="76" cy="17.5" r="0.8" fill="white" className="opacity-80"/> {/* Right eye highlight */}
-                
-                {/* Eyebrows */}
-                <path d="M61 15 Q64 14 67 15" strokeWidth="1" className="opacity-50"/>
-                <path d="M73 15 Q76 14 79 15" strokeWidth="1" className="opacity-50"/>
-                
-                {/* Nose - more defined */}
-                <path d="M70 20 L69 24 Q70 25 71 24 L70 20" fill="currentColor" className="opacity-40"/>
-                <circle cx="68.5" cy="24" r="0.5" fill="currentColor" className="opacity-30"/> {/* Left nostril */}
-                <circle cx="71.5" cy="24" r="0.5" fill="currentColor" className="opacity-30"/> {/* Right nostril */}
-                
-                {/* Mouth - more natural */}
-                <path d="M66 28 Q70 30 74 28" strokeWidth="1.2" className="opacity-70"/>
-                
-                {/* Hair - more detailed */}
-                <path d="M54 15 Q58 8 70 8 Q82 8 86 15 Q84 10 80 12 Q75 6 70 6 Q65 6 60 12 Q56 10 54 15" 
-                      strokeWidth="1.5" className="opacity-50" fill="currentColor" fillOpacity="0.1"/>
-                
-                {/* Neck - cylindrical */}
-                <rect x="62" y="38" width="16" height="12" rx="8" ry="6"/>
-                
-                {/* Shoulders and chest - anatomically correct */}
-                <path d="M70 50
-                        C90 50 100 55 100 65
-                        C100 70 98 75 95 80
-                        C92 85 90 90 88 95
-                        L88 105
-                        C88 115 85 125 80 135
-                        C78 140 75 145 70 148
-                        C65 145 62 140 60 135
-                        C55 125 52 115 52 105
-                        L52 95
-                        C50 90 48 85 45 80
-                        C42 75 40 70 40 65
-                        C40 55 50 50 70 50 Z"/>
+                {/* Torso outline */}
+                <path d="M80 43
+                        C95 43 105 48 105 58
+                        C105 65 103 72 100 78
+                        C98 84 96 90 94 96
+                        L94 110
+                        C94 120 91 130 86 140
+                        C84 145 81 150 80 152
+                        C79 150 76 145 74 140
+                        C69 130 66 120 66 110
+                        L66 96
+                        C64 90 62 84 60 78
+                        C57 72 55 65 55 58
+                        C55 48 65 43 80 43 Z"/>
                 
                 {/* Pelvis */}
-                <ellipse cx="70" cy="155" rx="25" ry="15"/>
+                <ellipse cx="80" cy="165" rx="20" ry="12" />
                 
-                {/* Arms - realistic proportions with joints */}
-                <ellipse cx="25" cy="75" rx="8" ry="25" transform="rotate(-10 25 75)"/>
-                <ellipse cx="115" cy="75" rx="8" ry="25" transform="rotate(10 115 75)"/>
-                <circle cx="25" cy="65" r="4" className="opacity-40"/> {/* Left shoulder joint */}
-                <circle cx="115" cy="65" r="4" className="opacity-40"/> {/* Right shoulder joint */}
+                {/* Arms */}
+                <ellipse cx="35" cy="65" rx="6" ry="20" transform="rotate(-15 35 65)" />
+                <ellipse cx="125" cy="65" rx="6" ry="20" transform="rotate(15 125 65)" />
+                <ellipse cx="30" cy="88" rx="5" ry="18" />
+                <ellipse cx="130" cy="88" rx="5" ry="18" />
                 
-                {/* Forearms */}
-                <ellipse cx="20" cy="100" rx="6" ry="20"/>
-                <ellipse cx="120" cy="100" rx="6" ry="20"/>
-                <circle cx="20" cy="85" r="3" className="opacity-40"/> {/* Left elbow */}
-                <circle cx="120" cy="85" r="3" className="opacity-40"/> {/* Right elbow */}
+                {/* Hands */}
+                <circle cx="28" cy="106" r="4" />
+                <circle cx="132" cy="106" r="4" />
                 
-                {/* Hands - more detailed */}
-                <ellipse cx="18" cy="120" rx="4" ry="6" className="opacity-60"/>
-                <ellipse cx="122" cy="120" rx="4" ry="6" className="opacity-60"/>
+                {/* Legs */}
+                <ellipse cx="68" cy="190" rx="8" ry="25" />
+                <ellipse cx="92" cy="190" rx="8" ry="25" />
+                <ellipse cx="66" cy="215" rx="6" ry="15" />
+                <ellipse cx="94" cy="215" rx="6" ry="15" />
                 
-                {/* Thighs */}
-                <ellipse cx="58" cy="180" rx="10" ry="30"/>
-                <ellipse cx="82" cy="180" rx="10" ry="30"/>
-                <circle cx="58" cy="160" r="4" className="opacity-40"/> {/* Left hip joint */}
-                <circle cx="82" cy="160" r="4" className="opacity-40"/> {/* Right hip joint */}
-                
-                {/* Calves */}
-                <ellipse cx="56" cy="200" rx="8" ry="18"/>
-                <ellipse cx="84" cy="200" rx="8" ry="18"/>
-                <circle cx="56" cy="190" r="3" className="opacity-40"/> {/* Left knee */}
-                <circle cx="84" cy="190" r="3" className="opacity-40"/> {/* Right knee */}
-                
-                {/* Feet - more realistic */}
-                <ellipse cx="54" cy="216" rx="10" ry="5" className="opacity-60"/>
-                <ellipse cx="86" cy="216" rx="10" ry="5" className="opacity-60"/>
-                
-                {/* Body details */}
-                <line x1="65" y1="60" x2="75" y2="60" strokeWidth="1" className="opacity-25"/> {/* Collar bone */}
-                <circle cx="70" cy="85" r="1.5" className="opacity-25"/> {/* Navel */}
-                <line x1="70" y1="68" x2="70" y2="75" strokeWidth="0.8" className="opacity-20"/> {/* Center line */}
-                
-                {/* Muscle definition hints */}
-                <path d="M60 75 Q65 78 70 75 Q75 78 80 75" strokeWidth="0.8" className="opacity-15"/> {/* Chest muscles */}
-                <ellipse cx="63" cy="95" rx="3" ry="8" className="opacity-10"/> {/* Left abs */}
-                <ellipse cx="77" cy="95" rx="3" ry="8" className="opacity-10"/> {/* Right abs */}
+                {/* Feet */}
+                <ellipse cx="62" cy="232" rx="8" ry="4" />
+                <ellipse cx="98" cy="232" rx="8" ry="4" />
               </g>
               
-              {/* Hydration fill with wave effect */}
-              {hydrationPercentage > 0 && (
-                <rect
-                  x="0"
-                  y="0"
-                  width="140"
-                  height="220"
-                  fill="url(#hydrationGradient)"
-                  mask="url(#bodyMask)"
-                  clipPath="url(#hydrationClip)"
-                  className="water-fill"
-                />
-              )}
+              {/* Muscle Group Highlighting */}
               
-              {/* Animated water particles showing realistic circulation */}
-              {current > 0 && (
-                <g mask="url(#bodyMask)">
-                  {/* Brain/head hydration - cognitive function */}
-                  {current >= 1 && (
-                    <g>
-                      <circle cx="66" cy="20" r="1" fill="#0ea5e9" className="droplet-fall" 
-                              style={{ animationDelay: '0.1s', opacity: 0.8 }} />
-                      <circle cx="74" cy="22" r="1" fill="#3b82f6" className="droplet-fall" 
-                              style={{ animationDelay: '0.3s', opacity: 0.7 }} />
-                    </g>
-                  )}
-                  
-                  {/* Heart and circulatory system */}
-                  {Array.from({ length: Math.min(current, 5) }, (_, i) => (
-                    <g key={`circulation-${i}`}>
-                      <circle
-                        cx={66 + (i % 3) * 4}
-                        cy={75 + (i * 6)}
-                        r="1.5"
-                        fill="#0ea5e9"
-                        className="droplet-fall"
-                        style={{ 
-                          animationDelay: `${i * 0.4}s`,
-                          opacity: Math.max(0.5, 0.9 - (i * 0.1))
-                        }}
-                      />
-                    </g>
-                  ))}
-                  
-                  {/* Kidney and filtration system */}
-                  {current >= 3 && (
-                    <g>
-                      <circle cx="58" cy="110" r="1.5" fill="#60a5fa" className="droplet-fall" 
-                              style={{ animationDelay: '0.8s', opacity: 0.7 }} />
-                      <circle cx="82" cy="112" r="1.5" fill="#60a5fa" className="droplet-fall" 
-                              style={{ animationDelay: '1.0s', opacity: 0.7 }} />
-                    </g>
-                  )}
-                  
-                  {/* Digestive system hydration */}
-                  {Array.from({ length: Math.min(current, 3) }, (_, i) => (
-                    <circle
-                      key={`digestive-${i}`}
-                      cx={65 + (i % 2) * 10}
-                      cy={90 + (i * 15)}
-                      r="2"
-                      fill="#93c5fd"
-                      className="droplet-fall"
-                      style={{ 
-                        animationDelay: `${i * 0.7 + 0.5}s`,
-                        opacity: 0.6
-                      }}
-                    />
-                  ))}
-                  
-                  {/* Limb circulation - arms and legs */}
-                  {current >= 4 && (
-                    <>
-                      {/* Arms */}
-                      <circle cx="25" cy="85" r="1" fill="#60a5fa" className="droplet-fall" 
-                              style={{ animationDelay: '1.2s', opacity: 0.6 }} />
-                      <circle cx="115" cy="87" r="1" fill="#60a5fa" className="droplet-fall" 
-                              style={{ animationDelay: '1.4s', opacity: 0.6 }} />
-                      
-                      {/* Legs */}
-                      <circle cx="58" cy="175" r="1" fill="#60a5fa" className="droplet-fall" 
-                              style={{ animationDelay: '1.6s', opacity: 0.6 }} />
-                      <circle cx="82" cy="177" r="1" fill="#60a5fa" className="droplet-fall" 
-                              style={{ animationDelay: '1.8s', opacity: 0.6 }} />
-                    </>
-                  )}
-                  
-                  {/* Joint lubrication indicators */}
-                  {current >= 6 && (
-                    <>
-                      <circle cx="25" cy="65" r="0.5" fill="#93c5fd" className="droplet-fall" 
-                              style={{ animationDelay: '2s', opacity: 0.5 }} />
-                      <circle cx="115" cy="65" r="0.5" fill="#93c5fd" className="droplet-fall" 
-                              style={{ animationDelay: '2.2s', opacity: 0.5 }} />
-                      <circle cx="56" cy="190" r="0.5" fill="#93c5fd" className="droplet-fall" 
-                              style={{ animationDelay: '2.4s', opacity: 0.5 }} />
-                      <circle cx="84" cy="190" r="0.5" fill="#93c5fd" className="droplet-fall" 
-                              style={{ animationDelay: '2.6s', opacity: 0.5 }} />
-                    </>
-                  )}
-                  
-                  {/* Cellular hydration indicators throughout body */}
-                  {current >= 7 && (
-                    <g opacity="0.4">
-                      <circle cx="45" cy="70" r="0.8" fill="#dbeafe" className="droplet-fall" 
-                              style={{ animationDelay: '3s' }} />
-                      <circle cx="95" cy="72" r="0.8" fill="#dbeafe" className="droplet-fall" 
-                              style={{ animationDelay: '3.2s' }} />
-                      <circle cx="50" cy="130" r="0.8" fill="#dbeafe" className="droplet-fall" 
-                              style={{ animationDelay: '3.4s' }} />
-                      <circle cx="90" cy="132" r="0.8" fill="#dbeafe" className="droplet-fall" 
-                              style={{ animationDelay: '3.6s' }} />
-                    </g>
-                  )}
+              {/* Chest muscles (pushups) */}
+              {muscleActivation.chest && (
+                <g className="muscle-highlight">
+                  <ellipse cx="80" cy="70" rx="18" ry="12" fill="url(#chestGradient)" className="animate-pulse" />
+                  <path d="M65 65 Q80 75 95 65 Q80 80 65 65" fill="url(#chestGradient)" opacity="0.6" />
                 </g>
               )}
-
-              {/* Hydration level indicator line */}
-              {hydrationPercentage > 5 && (
-                <line
-                  x1="30"
-                  y1={220 - (hydrationPercentage / 100) * 195}
-                  x2="110"
-                  y2={220 - (hydrationPercentage / 100) * 195}
-                  stroke="#0ea5e9"
-                  strokeWidth="2"
-                  strokeDasharray="5,5"
-                  className="opacity-70"
-                />
+              
+              {/* Shoulder muscles (pushups) */}
+              {muscleActivation.shoulders && (
+                <g className="muscle-highlight">
+                  <circle cx="35" cy="55" r="8" fill="url(#shoulderGradient)" className="animate-pulse" />
+                  <circle cx="125" cy="55" r="8" fill="url(#shoulderGradient)" className="animate-pulse" />
+                </g>
               )}
+              
+              {/* Triceps (pushups) */}
+              {muscleActivation.triceps && (
+                <g className="muscle-highlight">
+                  <ellipse cx="30" cy="75" rx="3" ry="12" fill="url(#shoulderGradient)" opacity="0.7" />
+                  <ellipse cx="130" cy="75" rx="3" ry="12" fill="url(#shoulderGradient)" opacity="0.7" />
+                </g>
+              )}
+              
+              {/* Core/Abs (situps) */}
+              {muscleActivation.abs && (
+                <g className="muscle-highlight">
+                  <ellipse cx="77" cy="95" rx="4" ry="12" fill="url(#coreGradient)" className="animate-pulse" />
+                  <ellipse cx="83" cy="95" rx="4" ry="12" fill="url(#coreGradient)" className="animate-pulse" />
+                  <ellipse cx="77" cy="115" rx="4" ry="8" fill="url(#coreGradient)" opacity="0.6" />
+                  <ellipse cx="83" cy="115" rx="4" ry="8" fill="url(#coreGradient)" opacity="0.6" />
+                </g>
+              )}
+              
+              {/* Obliques (situps) */}
+              {muscleActivation.core && (
+                <g className="muscle-highlight">
+                  <path d="M65 100 Q70 108 72 115 Q68 118 65 115 Q60 108 65 100" fill="url(#coreGradient)" opacity="0.5" />
+                  <path d="M95 100 Q90 108 88 115 Q92 118 95 115 Q100 108 95 100" fill="url(#coreGradient)" opacity="0.5" />
+                </g>
+              )}
+              
+              {/* Quadriceps (squats) */}
+              {muscleActivation.quads && (
+                <g className="muscle-highlight">
+                  <ellipse cx="68" cy="180" rx="6" ry="15" fill="url(#legGradient)" className="animate-pulse" />
+                  <ellipse cx="92" cy="180" rx="6" ry="15" fill="url(#legGradient)" className="animate-pulse" />
+                </g>
+              )}
+              
+              {/* Glutes (squats) */}
+              {muscleActivation.glutes && (
+                <g className="muscle-highlight">
+                  <ellipse cx="75" cy="155" rx="8" ry="8" fill="url(#legGradient)" opacity="0.7" />
+                  <ellipse cx="85" cy="155" rx="8" ry="8" fill="url(#legGradient)" opacity="0.7" />
+                </g>
+              )}
+              
+              {/* Hamstrings (running) */}
+              {muscleActivation.hamstrings && (
+                <g className="muscle-highlight">
+                  <ellipse cx="68" cy="195" rx="4" ry="18" fill="url(#legGradient)" opacity="0.6" />
+                  <ellipse cx="92" cy="195" rx="4" ry="18" fill="url(#legGradient)" opacity="0.6" />
+                </g>
+              )}
+              
+              {/* Calves (running) */}
+              {muscleActivation.calves && (
+                <g className="muscle-highlight">
+                  <ellipse cx="66" cy="218" rx="4" ry="12" fill="url(#legGradient)" className="animate-pulse" />
+                  <ellipse cx="94" cy="218" rx="4" ry="12" fill="url(#legGradient)" className="animate-pulse" />
+                </g>
+              )}
+              
+              {/* Cardiovascular system (running) */}
+              {muscleActivation.cardio && (
+                <g className="muscle-highlight">
+                  <circle cx="75" cy="75" r="4" fill="url(#cardioGradient)" className="animate-pulse">
+                    <animate attributeName="r" values="4;6;4" dur="1.2s" repeatCount="indefinite" />
+                  </circle>
+                  {/* Circulatory lines */}
+                  <path d="M75 75 Q65 85 68 190" stroke="url(#cardioGradient)" strokeWidth="2" fill="none" opacity="0.4" />
+                  <path d="M75 75 Q85 85 92 190" stroke="url(#cardioGradient)" strokeWidth="2" fill="none" opacity="0.4" />
+                  <path d="M75 75 Q60 70 35 65" stroke="url(#cardioGradient)" strokeWidth="2" fill="none" opacity="0.4" />
+                  <path d="M75 75 Q100 70 125 65" stroke="url(#cardioGradient)" strokeWidth="2" fill="none" opacity="0.4" />
+                </g>
+              )}
+              
+              {/* Hydration overlay */}
+              {hydrationPercentage > 20 && (
+                <g className="hydration-overlay" opacity={Math.min(hydrationPercentage / 100, 0.3)}>
+                  <circle cx="80" cy="20" r="15" fill="url(#hydrationGradient)" />
+                  <rect x="75" y="35" width="10" height="8" rx="5" fill="url(#hydrationGradient)" />
+                  <path d="M80 43 C95 43 105 48 105 58 C105 65 103 72 100 78 C98 84 96 90 94 96 L94 110 C94 120 91 130 86 140 C84 145 81 150 80 152 C79 150 76 145 74 140 C69 130 66 120 66 110 L66 96 C64 90 62 84 60 78 C57 72 55 65 55 58 C55 48 65 43 80 43 Z" fill="url(#hydrationGradient)" />
+                  
+                  {/* Animated water droplets */}
+                  {Array.from({ length: Math.min(current, 4) }, (_, i) => (
+                    <circle
+                      key={i}
+                      cx={75 + (i % 2) * 10}
+                      cy={60 + (i * 30)}
+                      r="2"
+                      fill="#06b6d4"
+                      className="animate-bounce"
+                      style={{ animationDelay: `${i * 0.3}s` }}
+                    />
+                  ))}
+                </g>
+              )}
+              
+              {/* Muscle group labels */}
+              <g className="text-xs font-medium fill-current opacity-70">
+                {muscleActivation.chest && <text x="45" y="70" textAnchor="middle">Chest</text>}
+                {muscleActivation.core && <text x="115" y="100" textAnchor="middle">Core</text>}
+                {muscleActivation.quads && <text x="45" y="180" textAnchor="middle">Quads</text>}
+                {muscleActivation.calves && <text x="115" y="215" textAnchor="middle">Calves</text>}
+                {muscleActivation.cardio && <text x="115" y="75" textAnchor="middle">Heart</text>}
+              </g>
             </svg>
           </div>
         </div>
 
-        {/* Progress indicator with status */}
+        {/* Muscle Group Status */}
         <div className="text-center mb-4">
           <div className="text-2xl font-bold text-blue-500 mb-1">
             {Math.round(hydrationPercentage)}%
           </div>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-muted-foreground mb-3">
             {hydrationPercentage >= 100 ? 'Fully Hydrated! 🌊' : 
              hydrationPercentage >= 75 ? 'Well Hydrated 💧' :
              hydrationPercentage >= 50 ? 'Getting There 💦' :
              hydrationPercentage >= 25 ? 'Need More Water 🥤' :
              'Dehydrated ⚠️'}
+          </div>
+          
+          {/* Exercise completion status */}
+          <div className="grid grid-cols-2 gap-2 text-xs">
+            <div className={`flex items-center gap-1 p-2 rounded ${
+              muscleActivation.chest ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-500'
+            }`}>
+              <div className={`w-2 h-2 rounded-full ${
+                muscleActivation.chest ? 'bg-red-500' : 'bg-gray-400'
+              }`} />
+              Chest & Arms
+            </div>
+            <div className={`flex items-center gap-1 p-2 rounded ${
+              muscleActivation.core ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
+            }`}>
+              <div className={`w-2 h-2 rounded-full ${
+                muscleActivation.core ? 'bg-green-500' : 'bg-gray-400'
+              }`} />
+              Core
+            </div>
+            <div className={`flex items-center gap-1 p-2 rounded ${
+              muscleActivation.quads ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500'
+            }`}>
+              <div className={`w-2 h-2 rounded-full ${
+                muscleActivation.quads ? 'bg-blue-500' : 'bg-gray-400'
+              }`} />
+              Legs
+            </div>
+            <div className={`flex items-center gap-1 p-2 rounded ${
+              muscleActivation.cardio ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-500'
+            }`}>
+              <div className={`w-2 h-2 rounded-full ${
+                muscleActivation.cardio ? 'bg-purple-500' : 'bg-gray-400'
+              }`} />
+              Cardio
+            </div>
           </div>
         </div>
 

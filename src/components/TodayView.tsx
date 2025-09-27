@@ -186,6 +186,8 @@ export function TodayView({ settings, records, setRecords, currentStreak, setCur
           target={targets.hydration}
           onAdjust={(delta) => updateExercise('hydration', delta)}
           complete={isExerciseComplete(todayData.hydration, targets.hydration)}
+          exerciseData={todayData}
+          exerciseTargets={targets}
         />
       </div>
 

@@ -149,11 +149,49 @@
   filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.2));
 }
 
+/* Muscle group highlighting animations */
+.muscle-body {
+  filter: drop-shadow(0 2px 8px rgba(59, 130, 246, 0.05));
+}
+
+.muscle-highlight {
+  animation: muscle-pulse 2s ease-in-out infinite;
+}
+
+@keyframes muscle-pulse {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.1);
+  }
+}
+
+.hydration-overlay {
+  animation: gentle-flow 3s ease-in-out infinite;
+}
+
+@keyframes gentle-flow {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .water-fill {
     animation: none;
   }
   .droplet-fall {
+    animation: none;
+  }
+  .muscle-highlight {
+    animation: none;
+  }
+  .hydration-overlay {
     animation: none;
   }
 }
