@@ -24,7 +24,8 @@ export function CalendarView({ records, setRecords, settings }: CalendarViewProp
       pushups: Math.round(settings.level),
       situps: Math.round(settings.level),
       squats: Math.round(settings.level),
-      runDistance: settings.level / 10
+      runDistance: settings.level / 10,
+      hydration: 8
     }
     
     const { exercises } = record
@@ -32,10 +33,11 @@ export function CalendarView({ records, setRecords, settings }: CalendarViewProp
       exercises.pushups >= targets.pushups,
       exercises.situps >= targets.situps,
       exercises.squats >= targets.squats,
-      exercises.runDistance >= targets.runDistance
+      exercises.runDistance >= targets.runDistance,
+      exercises.hydration >= targets.hydration
     ].filter(Boolean).length
     
-    if (completedCount === 4) return 'complete'
+    if (completedCount === 5) return 'complete'
     if (completedCount > 0) return 'partial'
     return 'missed'
   }
@@ -182,14 +184,16 @@ function DayDetails({ date, records, settings, onClose }: DayDetailsProps) {
     pushups: Math.round(settings.level),
     situps: Math.round(settings.level),
     squats: Math.round(settings.level),
-    runDistance: settings.level / 10
+    runDistance: settings.level / 10,
+    hydration: 8
   }
 
   const exercises = record?.exercises || {
     pushups: 0,
     situps: 0,
     squats: 0,
-    runDistance: 0
+    runDistance: 0,
+    hydration: 0
   }
 
   const formatDistance = (distance: number) => {
@@ -234,6 +238,12 @@ function DayDetails({ date, records, settings, onClose }: DayDetailsProps) {
           <div className="text-sm text-muted-foreground">Running</div>
           <div className="text-xs">Target: {getTargetDistance()}</div>
         </div>
+      </div>
+      
+      <div className="text-center p-3 bg-accent/5 border border-accent/20 rounded-lg">
+        <div className="text-2xl font-bold text-accent">{exercises.hydration}/8</div>
+        <div className="text-sm text-accent-foreground">💧 Glasses of Water</div>
+        <div className="text-xs text-muted-foreground">Target: 8 glasses</div>
       </div>
 
       {record?.streakOnThatDate && (

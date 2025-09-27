@@ -57,10 +57,10 @@ export function SelfTestPanel({
       testDate.setDate(today.getDate() - (patterns.length - 1 - index))
       
       const exercises = pattern.complete 
-        ? { pushups: 50, situps: 50, squats: 50, runDistance: 5 }
+        ? { pushups: 50, situps: 50, squats: 50, runDistance: 5, hydration: 8 }
         : index === 6 // Partial day
-        ? { pushups: 25, situps: 25, squats: 25, runDistance: 2.5 }
-        : { pushups: 0, situps: 0, squats: 0, runDistance: 0 }
+        ? { pushups: 25, situps: 25, squats: 25, runDistance: 2.5, hydration: 4 }
+        : { pushups: 0, situps: 0, squats: 0, runDistance: 0, hydration: 0 }
       
       if (pattern.complete) {
         streak++

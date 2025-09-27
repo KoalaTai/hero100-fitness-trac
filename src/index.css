@@ -88,11 +88,45 @@
   animation: celebrate 0.6s ease-in-out;
 }
 
+/* Hydration Animation */
+@keyframes water-fill {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes droplet-fall {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0.8;
+  }
+}
+
+.water-fill {
+  animation: water-fill 1s ease-out forwards;
+}
+
+.droplet-fall {
+  animation: droplet-fall 2s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .progress-ring {
+  .water-fill {
     animation: none;
   }
-  .celebrate {
+  .droplet-fall {
     animation: none;
   }
 }

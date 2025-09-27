@@ -39,9 +39,9 @@ export function SettingsView({
   }
 
   const exportData = () => {
-    const csvHeaders = 'date,levelPercent,pushups,situps,squats,runDistanceKm,completed,streakOnThatDate\n'
+    const csvHeaders = 'date,levelPercent,pushups,situps,squats,runDistanceKm,hydration,completed,streakOnThatDate\n'
     const csvData = records.map(record => 
-      `${record.date},${record.level},${record.exercises.pushups},${record.exercises.situps},${record.exercises.squats},${record.exercises.runDistance},${record.completed},${record.streakOnThatDate}`
+      `${record.date},${record.level},${record.exercises.pushups},${record.exercises.situps},${record.exercises.squats},${record.exercises.runDistance},${record.exercises.hydration},${record.completed},${record.streakOnThatDate}`
     ).join('\n')
     
     const blob = new Blob([csvHeaders + csvData], { type: 'text/csv' })
@@ -84,10 +84,11 @@ export function SettingsView({
               pushups: Number(values[2]) || 0,
               situps: Number(values[3]) || 0,
               squats: Number(values[4]) || 0,
-              runDistance: Number(values[5]) || 0
+              runDistance: Number(values[5]) || 0,
+              hydration: Number(values[6]) || 0
             },
-            completed: values[6] === 'true',
-            streakOnThatDate: Number(values[7]) || 0
+            completed: values[7] === 'true',
+            streakOnThatDate: Number(values[8]) || 0
           }
           importedRecords.push(record)
         }

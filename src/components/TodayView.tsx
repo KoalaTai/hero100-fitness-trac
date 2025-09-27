@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ExerciseData, DayRecord, UserSettings } from '../App'
+import { HydrationVisualizer } from './HydrationVisualizer'
 import { Plus, Minus } from '@phosphor-icons/react'
 
 interface TodayViewProps {
@@ -18,7 +19,8 @@ export function TodayView({ settings, records, setRecords, currentStreak, setCur
     pushups: 0,
     situps: 0,
     squats: 0,
-    runDistance: 0
+    runDistance: 0,
+    hydration: 0
   })
   
   const [showCelebration, setShowCelebration] = useState(false)
@@ -36,7 +38,8 @@ export function TodayView({ settings, records, setRecords, currentStreak, setCur
     pushups: Math.round(settings.level),
     situps: Math.round(settings.level),
     squats: Math.round(settings.level),
-    runDistance: settings.level / 10
+    runDistance: settings.level / 10,
+    hydration: 8 // 8 glasses of water (standard daily recommendation)
   }
 
   const getProgress = (current: number, target: number) => {
@@ -51,7 +54,8 @@ export function TodayView({ settings, records, setRecords, currentStreak, setCur
     return isExerciseComplete(todayData.pushups, targets.pushups) &&
            isExerciseComplete(todayData.situps, targets.situps) &&
            isExerciseComplete(todayData.squats, targets.squats) &&
-           isExerciseComplete(todayData.runDistance, targets.runDistance)
+           isExerciseComplete(todayData.runDistance, targets.runDistance) &&
+           isExerciseComplete(todayData.hydration, targets.hydration)
   }
 
   const updateExercise = (exercise: keyof ExerciseData, delta: number) => {
@@ -70,7 +74,8 @@ export function TodayView({ settings, records, setRecords, currentStreak, setCur
       const newCompleted = isExerciseComplete(newData.pushups, targets.pushups) &&
                          isExerciseComplete(newData.situps, targets.situps) &&
                          isExerciseComplete(newData.squats, targets.squats) &&
-                         isExerciseComplete(newData.runDistance, targets.runDistance)
+                         isExerciseComplete(newData.runDistance, targets.runDistance) &&
+                         isExerciseComplete(newData.hydration, targets.hydration)
       
       const newRecord: DayRecord = {
         date: today,
@@ -173,6 +178,14 @@ export function TodayView({ settings, records, setRecords, currentStreak, setCur
           progress={getProgress(todayData.runDistance, targets.runDistance)}
           complete={isExerciseComplete(todayData.runDistance, targets.runDistance)}
           increment={settings.units === 'imperial' ? 0.5 : 1.0}
+        />
+
+        {/* Hydration */}
+        <HydrationVisualizer
+          current={todayData.hydration}
+          target={targets.hydration}
+          onAdjust={(delta) => updateExercise('hydration', delta)}
+          complete={isExerciseComplete(todayData.hydration, targets.hydration)}
         />
       </div>
 

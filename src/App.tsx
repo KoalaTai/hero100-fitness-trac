@@ -16,6 +16,7 @@ export type ExerciseData = {
   situps: number
   squats: number
   runDistance: number
+  hydration: number
 }
 
 export type DayRecord = {
