@@ -94,6 +94,9 @@
     transform: translateY(100%);
     opacity: 0;
   }
+  60% {
+    opacity: 0.8;
+  }
   100% {
     transform: translateY(0);
     opacity: 1;
@@ -102,24 +105,47 @@
 
 @keyframes droplet-fall {
   0% {
-    transform: translateY(-10px);
+    transform: translateY(-15px) scale(0.8);
     opacity: 0;
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1);
+  }
+  70% {
+    opacity: 0.8;
+    transform: translateY(5px) scale(1.1);
+  }
+  100% {
+    transform: translateY(15px) scale(0.9);
+    opacity: 0.4;
+  }
+}
+
+@keyframes hydration-pulse {
+  0%, 100% {
+    opacity: 0.7;
   }
   50% {
     opacity: 1;
   }
-  100% {
-    transform: translateY(0);
-    opacity: 0.8;
-  }
 }
 
 .water-fill {
-  animation: water-fill 1s ease-out forwards;
+  animation: water-fill 1.2s ease-out forwards;
 }
 
 .droplet-fall {
-  animation: droplet-fall 2s ease-in-out infinite;
+  animation: droplet-fall 3s ease-in-out infinite;
+}
+
+/* Enhanced android/human body styling */
+.hydration-body {
+  filter: drop-shadow(0 2px 8px rgba(59, 130, 246, 0.1));
+}
+
+.hydration-body.hydrated {
+  animation: hydration-pulse 2s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

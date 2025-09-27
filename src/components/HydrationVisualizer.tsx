@@ -27,128 +27,198 @@ export function HydrationVisualizer({ current, target, onAdjust, complete }: Hyd
           </div>
         </div>
 
-        {/* Body Silhouette with Hydration Visualization */}
+        {/* Human/Android Body Hydration Visualization */}
         <div className="flex items-center justify-center mb-4">
           <div className="relative">
-            <svg width="120" height="200" viewBox="0 0 120 200" className="text-muted-foreground">
-              {/* Body outline */}
-              <path
-                d="M60 20 
-                   C55 20 50 25 50 30
-                   L50 45
-                   C45 50 40 55 40 65
-                   L40 120
-                   C40 130 45 135 50 135
-                   L50 160
-                   C45 165 40 170 40 180
-                   L40 190
-                   C40 195 45 200 50 200
-                   L70 200
-                   C75 200 80 195 80 190
-                   L80 180
-                   C80 170 75 165 70 160
-                   L70 135
-                   C75 135 80 130 80 120
-                   L80 65
-                   C80 55 75 50 70 45
-                   L70 30
-                   C70 25 65 20 60 20 Z"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="opacity-40"
-              />
-              
-              {/* Head */}
-              <circle 
-                cx="60" 
-                cy="15" 
-                r="12" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2"
-                className="opacity-40"
-              />
-              
-              {/* Hydration fill */}
+            <svg 
+              width="140" 
+              height="220" 
+              viewBox="0 0 140 220" 
+              className={`text-muted-foreground hydration-body transition-all duration-500 ${
+                hydrationPercentage >= 100 ? 'hydrated' : ''
+              }`}
+            >
               <defs>
+                {/* Hydration gradient with wave effect */}
                 <linearGradient id="hydrationGradient" x1="0%" y1="100%" x2="0%" y2="0%">
-                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8" />
-                  <stop offset="50%" stopColor="#60a5fa" stopOpacity="0.6" />
-                  <stop offset="100%" stopColor="#93c5fd" stopOpacity="0.4" />
+                  <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.9" />
+                  <stop offset="30%" stopColor="#3b82f6" stopOpacity="0.7" />
+                  <stop offset="60%" stopColor="#60a5fa" stopOpacity="0.5" />
+                  <stop offset="100%" stopColor="#93c5fd" stopOpacity="0.3" />
                 </linearGradient>
+                
+                {/* Clip path for hydration level with wave effect */}
+                <clipPath id="hydrationClip">
+                  <rect 
+                    x="0" 
+                    y={220 - (hydrationPercentage / 100) * 190} 
+                    width="140" 
+                    height={(hydrationPercentage / 100) * 190}
+                  />
+                </clipPath>
+
+                {/* Body mask for proper filling */}
+                <mask id="bodyMask">
+                  <rect width="140" height="220" fill="black"/>
+                  {/* Head */}
+                  <circle cx="70" cy="18" r="15" fill="white"/>
+                  {/* Neck */}
+                  <rect x="62" y="30" width="16" height="12" rx="8" fill="white"/>
+                  {/* Main body */}
+                  <path
+                    d="M70 40
+                       C80 40 90 45 90 55
+                       L90 70
+                       C95 75 100 80 100 90
+                       L100 130
+                       C100 140 95 145 90 145
+                       L90 160
+                       C90 170 85 175 80 175
+                       L80 195
+                       C80 200 75 205 70 205
+                       L70 205
+                       C65 205 60 200 60 195
+                       L60 175
+                       C55 175 50 170 50 160
+                       L50 145
+                       C45 145 40 140 40 130
+                       L40 90
+                       C40 80 45 75 50 70
+                       L50 55
+                       C50 45 60 40 70 40 Z"
+                    fill="white"
+                  />
+                  {/* Arms */}
+                  <ellipse cx="25" cy="75" rx="8" ry="25" fill="white"/>
+                  <ellipse cx="115" cy="75" rx="8" ry="25" fill="white"/>
+                  {/* Legs */}
+                  <ellipse cx="55" cy="185" rx="8" ry="20" fill="white"/>
+                  <ellipse cx="85" cy="185" rx="8" ry="20" fill="white"/>
+                </mask>
               </defs>
               
+              {/* Android/Human body outline */}
+              <g stroke="currentColor" strokeWidth="2.5" fill="none" className="opacity-50">
+                {/* Head with slight android/tech feel */}
+                <circle cx="70" cy="18" r="15"/>
+                <circle cx="65" cy="15" r="1.5" fill="currentColor" className="opacity-60"/> {/* Eye */}
+                <circle cx="75" cy="15" r="1.5" fill="currentColor" className="opacity-60"/> {/* Eye */}
+                <path d="M65 22 Q70 25 75 22" strokeWidth="1.5" className="opacity-60"/> {/* Mouth */}
+                
+                {/* Neck */}
+                <rect x="62" y="30" width="16" height="12" rx="8"/>
+                
+                {/* Main torso - slightly robotic proportions */}
+                <path d="M70 40
+                         C80 40 90 45 90 55
+                         L90 70
+                         C95 75 100 80 100 90
+                         L100 130
+                         C100 140 95 145 90 145
+                         L90 160
+                         C90 170 85 175 80 175
+                         L80 195
+                         C80 200 75 205 70 205
+                         L70 205
+                         C65 205 60 200 60 195
+                         L60 175
+                         C55 175 50 170 50 160
+                         L50 145
+                         C45 145 40 140 40 130
+                         L40 90
+                         C40 80 45 75 50 70
+                         L50 55
+                         C50 45 60 40 70 40 Z"/>
+                
+                {/* Arms */}
+                <ellipse cx="25" cy="75" rx="8" ry="25"/>
+                <ellipse cx="115" cy="75" rx="8" ry="25"/>
+                
+                {/* Legs */}
+                <ellipse cx="55" cy="185" rx="8" ry="20"/>
+                <ellipse cx="85" cy="185" rx="8" ry="20"/>
+                
+                {/* Tech details */}
+                <circle cx="70" cy="60" r="3" className="opacity-30"/> {/* Chest indicator */}
+                <rect x="65" y="80" width="10" height="3" rx="1" className="opacity-20"/> {/* Body panel */}
+                <rect x="65" y="90" width="10" height="3" rx="1" className="opacity-20"/> {/* Body panel */}
+              </g>
+              
+              {/* Hydration fill with wave effect */}
               {hydrationPercentage > 0 && (
-                <path
-                  d="M60 20 
-                     C55 20 50 25 50 30
-                     L50 45
-                     C45 50 40 55 40 65
-                     L40 120
-                     C40 130 45 135 50 135
-                     L50 160
-                     C45 165 40 170 40 180
-                     L40 190
-                     C40 195 45 200 50 200
-                     L70 200
-                     C75 200 80 195 80 190
-                     L80 180
-                     C80 170 75 165 70 160
-                     L70 135
-                     C75 135 80 130 80 120
-                     L80 65
-                     C80 55 75 50 70 45
-                     L70 30
-                     C70 25 65 20 60 20 Z"
+                <rect
+                  x="0"
+                  y="0"
+                  width="140"
+                  height="220"
                   fill="url(#hydrationGradient)"
+                  mask="url(#bodyMask)"
                   clipPath="url(#hydrationClip)"
                   className="water-fill"
                 />
               )}
               
-              {/* Clip path for hydration level */}
-              <defs>
-                <clipPath id="hydrationClip">
-                  <rect 
-                    x="0" 
-                    y={200 - (hydrationPercentage / 100) * 180} 
-                    width="120" 
-                    height={(hydrationPercentage / 100) * 180}
-                  />
-                </clipPath>
-              </defs>
-              
-              {/* Water droplets animation */}
+              {/* Animated water particles inside body */}
               {current > 0 && (
-                <g>
-                  {Array.from({ length: Math.min(current, 6) }, (_, i) => (
-                    <circle
-                      key={i}
-                      cx={45 + (i % 2) * 30}
-                      cy={50 + (i * 20)}
-                      r="1.5"
-                      fill="#60a5fa"
-                      className="droplet-fall"
-                      style={{ 
-                        animationDelay: `${i * 0.3}s`,
-                        opacity: Math.max(0.3, 1 - (i * 0.15))
-                      }}
-                    />
+                <g mask="url(#bodyMask)">
+                  {Array.from({ length: Math.min(current, 8) }, (_, i) => (
+                    <g key={i}>
+                      <circle
+                        cx={50 + (i % 3) * 20}
+                        cy={60 + (i * 15)}
+                        r="2"
+                        fill="#0ea5e9"
+                        className="droplet-fall"
+                        style={{ 
+                          animationDelay: `${i * 0.4}s`,
+                          opacity: Math.max(0.4, 1 - (i * 0.12))
+                        }}
+                      />
+                      {/* Small bubble effect */}
+                      <circle
+                        cx={55 + (i % 2) * 15}
+                        cy={80 + (i * 12)}
+                        r="1"
+                        fill="#60a5fa"
+                        className="droplet-fall"
+                        style={{ 
+                          animationDelay: `${i * 0.5 + 0.2}s`,
+                          opacity: 0.6
+                        }}
+                      />
+                    </g>
                   ))}
                 </g>
+              )}
+
+              {/* Hydration level indicator line */}
+              {hydrationPercentage > 5 && (
+                <line
+                  x1="30"
+                  y1={220 - (hydrationPercentage / 100) * 190}
+                  x2="110"
+                  y2={220 - (hydrationPercentage / 100) * 190}
+                  stroke="#0ea5e9"
+                  strokeWidth="2"
+                  strokeDasharray="5,5"
+                  className="opacity-70"
+                />
               )}
             </svg>
           </div>
         </div>
 
-        {/* Progress indicator */}
+        {/* Progress indicator with status */}
         <div className="text-center mb-4">
           <div className="text-2xl font-bold text-blue-500 mb-1">
             {Math.round(hydrationPercentage)}%
           </div>
           <div className="text-sm text-muted-foreground">
-            Hydrated
+            {hydrationPercentage >= 100 ? 'Fully Hydrated! 🌊' : 
+             hydrationPercentage >= 75 ? 'Well Hydrated 💧' :
+             hydrationPercentage >= 50 ? 'Getting There 💦' :
+             hydrationPercentage >= 25 ? 'Need More Water 🥤' :
+             'Dehydrated ⚠️'}
           </div>
         </div>
 
