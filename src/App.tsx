@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { TodayView } from './components/TodayView'
 import { CalendarView } from './components/CalendarView'
@@ -19,12 +19,15 @@ export type ExerciseData = {
   hydration: number
 }
 
+export type DayType = 'training' | 'mobility' | 'rest'
+
 export type DayRecord = {
   date: string
   level: number
   exercises: ExerciseData
   completed: boolean
   streakOnThatDate: number
+  dayType: DayType
 }
 
 export type UserSettings = {
@@ -43,7 +46,7 @@ function App() {
   
   const [records, setRecords] = useKV<DayRecord[]>('hero100-records', [])
   const [currentStreak, setCurrentStreak] = useKV<number>('hero100-streak', 0)
-  
+
   const [activeTab, setActiveTab] = useState('today')
   const [showSelfTest, setShowSelfTest] = useState(false)
   const [showFinalReport, setShowFinalReport] = useState(false)
@@ -52,6 +55,24 @@ function App() {
   const safeSettings = settings || { level: 50, units: 'metric' as const, onboarded: false }
   const safeRecords = records || []
   const safeCurrentStreak = currentStreak || 0
+
+  useEffect(() => {
+    if (!records || records.length === 0) return
+
+    const needsMigration = records.some(record => record.dayType === undefined)
+
+    if (needsMigration) {
+      setRecords(prev =>
+        (prev || []).map(record =>
+          record.dayType ? record : { ...record, dayType: 'training' as DayType }
+        )
+      )
+    }
+  }, [records, setRecords])
+
+  const normalizedRecords = safeRecords.map(record =>
+    record.dayType ? record : { ...record, dayType: 'training' as DayType }
+  )
 
   if (!safeSettings.onboarded) {
     return (
@@ -66,7 +87,7 @@ function App() {
   if (showSelfTest) {
     return (
       <SelfTestPanel 
-        records={safeRecords}
+        records={normalizedRecords}
         setRecords={setRecords}
         currentStreak={safeCurrentStreak}
         setCurrentStreak={setCurrentStreak}
@@ -78,7 +99,7 @@ function App() {
   if (showFinalReport) {
     return (
       <FinalReportView 
-        records={safeRecords}
+        records={normalizedRecords}
         currentStreak={safeCurrentStreak}
         onBack={() => setShowFinalReport(false)}
       />
@@ -138,9 +159,9 @@ function App() {
           </TabsList>
 
           <TabsContent value="today" className="mt-0">
-            <TodayView 
+            <TodayView
               settings={safeSettings}
-              records={safeRecords}
+              records={normalizedRecords}
               setRecords={setRecords}
               currentStreak={safeCurrentStreak}
               setCurrentStreak={setCurrentStreak}
@@ -148,18 +169,18 @@ function App() {
           </TabsContent>
 
           <TabsContent value="calendar" className="mt-0">
-            <CalendarView 
-              records={safeRecords}
+            <CalendarView
+              records={normalizedRecords}
               setRecords={setRecords}
               settings={safeSettings}
             />
           </TabsContent>
 
           <TabsContent value="settings" className="mt-0">
-            <SettingsView 
+            <SettingsView
               settings={safeSettings}
               setSettings={setSettings}
-              records={safeRecords}
+              records={normalizedRecords}
               setRecords={setRecords}
               setCurrentStreak={setCurrentStreak}
             />

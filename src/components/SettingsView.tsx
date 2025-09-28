@@ -39,9 +39,9 @@ export function SettingsView({
   }
 
   const exportData = () => {
-    const csvHeaders = 'date,levelPercent,pushups,situps,squats,runDistanceKm,hydration,completed,streakOnThatDate\n'
-    const csvData = records.map(record => 
-      `${record.date},${record.level},${record.exercises.pushups},${record.exercises.situps},${record.exercises.squats},${record.exercises.runDistance},${record.exercises.hydration},${record.completed},${record.streakOnThatDate}`
+    const csvHeaders = 'date,dayType,levelPercent,pushups,situps,squats,runDistanceKm,hydration,completed,streakOnThatDate\n'
+    const csvData = records.map(record =>
+      `${record.date},${record.dayType},${record.level},${record.exercises.pushups},${record.exercises.situps},${record.exercises.squats},${record.exercises.runDistance},${record.exercises.hydration},${record.completed},${record.streakOnThatDate}`
     ).join('\n')
     
     const blob = new Blob([csvHeaders + csvData], { type: 'text/csv' })
@@ -74,21 +74,35 @@ export function SettingsView({
         }
 
         const importedRecords: DayRecord[] = []
-        
+        const dayTypeIndex = headers.indexOf('dayType')
+        const levelIndex = headers.indexOf('levelPercent')
+        const pushupsIndex = headers.indexOf('pushups')
+        const situpsIndex = headers.indexOf('situps')
+        const squatsIndex = headers.indexOf('squats')
+        const runIndex = headers.indexOf('runDistanceKm')
+        const hydrationIndex = headers.indexOf('hydration')
+        const completedIndex = headers.indexOf('completed')
+        const streakIndex = headers.indexOf('streakOnThatDate')
+
         for (let i = 1; i < lines.length; i++) {
           const values = lines[i].split(',')
+          const parsedDayType = dayTypeIndex >= 0 ? values[dayTypeIndex] : undefined
+          const dayType = parsedDayType === 'rest' || parsedDayType === 'mobility' || parsedDayType === 'training'
+            ? parsedDayType
+            : 'training'
           const record: DayRecord = {
             date: values[0],
-            level: Number(values[1]) || settings.level,
+            level: Number(values[levelIndex >= 0 ? levelIndex : 1]) || settings.level,
             exercises: {
-              pushups: Number(values[2]) || 0,
-              situps: Number(values[3]) || 0,
-              squats: Number(values[4]) || 0,
-              runDistance: Number(values[5]) || 0,
-              hydration: Number(values[6]) || 0
+              pushups: Number(values[pushupsIndex >= 0 ? pushupsIndex : 2]) || 0,
+              situps: Number(values[situpsIndex >= 0 ? situpsIndex : 3]) || 0,
+              squats: Number(values[squatsIndex >= 0 ? squatsIndex : 4]) || 0,
+              runDistance: Number(values[runIndex >= 0 ? runIndex : 5]) || 0,
+              hydration: Number(values[hydrationIndex >= 0 ? hydrationIndex : 6]) || 0
             },
-            completed: values[7] === 'true',
-            streakOnThatDate: Number(values[8]) || 0
+            completed: values[completedIndex >= 0 ? completedIndex : 7] === 'true',
+            streakOnThatDate: Number(values[streakIndex >= 0 ? streakIndex : 8]) || 0,
+            dayType
           }
           importedRecords.push(record)
         }

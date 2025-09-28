@@ -73,7 +73,8 @@ export function SelfTestPanel({
         level: 50,
         exercises,
         completed: pattern.complete,
-        streakOnThatDate: streak
+        streakOnThatDate: streak,
+        dayType: 'training'
       })
       
       addTestResult(`Day ${index + 1}: ${pattern.desc}`)
