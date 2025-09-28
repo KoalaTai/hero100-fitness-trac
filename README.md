@@ -1,23 +1,53 @@
-# ✨ Welcome to Your Spark Template!
-You've just launched your brand-new Spark Template Codespace — everything’s fired up and ready for you to explore, build, and create with Spark!
+# Hero100 Fitness Tracker
 
-This template is your blank canvas. It comes with a minimal setup to help you get started quickly with Spark development.
+This repository is the home for the Hero100 fitness tracking experience. It currently contains a lightweight Vite + React front-end scaffold that you can expand into a fully featured cross-platform product.
 
-🚀 What's Inside?
-- A clean, minimal Spark environment
-- Pre-configured for local development
-- Ready to scale with your ideas
-  
-🧠 What Can You Do?
+## Project Overview
 
-Right now, this is just a starting point — the perfect place to begin building and testing your Spark applications.
+- **Tech stack**: Vite, React, TypeScript, Tailwind CSS (via shadcn UI configuration)
+- **Directory highlights**:
+  - `src/`: React application source code (components, routes, styles)
+  - `public/`: Static assets served by Vite
+  - `docs/`: Product and engineering documentation
 
-🧹 Just Exploring?
-No problem! If you were just checking things out and don’t need to keep this code:
+## AI Upgrade Path
 
-- Simply delete your Spark.
-- Everything will be cleaned up — no traces left behind.
+Looking to enrich the product with AI and data integrations? Start with the [AI Upgrade Path](docs/ai-upgrade-plan.md) that outlines:
 
-📄 License For Spark Template Resources 
+- High-impact open-source datasets and APIs for exercises, nutrition, and wearables
+- Incremental AI-powered feature ideas (workout plan generation, rep counting, adherence forecasting, etc.)
+- Recommended third-party services (auth, database, analytics, observability)
+- Security and privacy guardrails to implement from day one
 
-The Spark Template files and resources from GitHub are licensed under the terms of the MIT license, Copyright GitHub, Inc.
+## Getting Started
+
+1. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+2. Run the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+   Vite will start a development server (default: http://localhost:5173) with hot module replacement.
+
+3. Build for production:
+
+   ```bash
+   npm run build
+   ```
+
+## Contributing
+
+1. Create a feature branch: `git checkout -b feature/my-update`
+2. Make changes and run tests/linters as appropriate
+3. Commit with a descriptive message
+4. Open a pull request for review
+
+## License
+
+This project is distributed under the MIT License. See [LICENSE](LICENSE) for details.
