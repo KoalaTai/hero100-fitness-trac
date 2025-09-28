@@ -102,7 +102,8 @@ export function TodayView({ settings, records, setRecords, currentStreak, setCur
         level: settings.level,
         exercises: newData,
         completed: newCompleted,
-        streakOnThatDate: currentStreak + (newCompleted && !wasComplete ? 1 : 0)
+        streakOnThatDate: currentStreak + (newCompleted && !wasComplete ? 1 : 0),
+        dayType: existing?.dayType ?? 'training'
       }
       
       const updated = existing
